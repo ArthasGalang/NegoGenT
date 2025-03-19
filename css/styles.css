@@ -1,0 +1,222 @@
+/* ...existing code... */
+
+body {
+    margin: 0;
+    padding-top: 75px; /* Adjust to match the new header height */
+    font-family: Arial, sans-serif;
+    letter-spacing: 1.5px;
+    background-color: #f0fff4; /* Greenish white background */
+    color: #333; /* Default text color */
+}
+
+.dashboard-header {
+    background-color: #3d8f50;
+    color: white;
+    padding: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+    letter-spacing: 1.5px;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    padding-left: 10px;
+    font-size: 26px; /* Slightly larger font size */
+    letter-spacing: 2px;
+    font-weight: bold; /* Make the text bold */
+}
+
+.login-container, .register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 75px); /* Full height minus header */
+    margin: 0 auto;
+}
+
+.login-form {
+    background: white;
+    padding: 30px 40px; /* Increased padding for a more spacious look */
+    border-radius: 10px; /* Slightly more rounded corners */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow for depth */
+    width: 350px; /* Slightly wider form */
+    text-align: center;
+}
+
+.login-form h2 {
+    margin-bottom: 20px;
+    font-size: 26px; /* Larger heading */
+    color: #3d8f50;
+    font-weight: bold;
+}
+
+.login-form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 14px;
+    color: #555; /* Softer text color */
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px; /* Slightly larger padding */
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Slightly more rounded corners */
+    font-size: 14px;
+    transition: border-color 0.3s ease; /* Smooth transition for focus */
+}
+
+.login-form input:focus {
+    border-color: #3d8f50; /* Highlight border on focus */
+    outline: none;
+}
+
+.login-form button {
+    background-color: #3d8f50;
+    color: white;
+    padding: 12px 20px; /* Larger button */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    width: 100%; /* Make the button the same width as the text fields */
+    margin-top: 10px; /* Add spacing above the button */
+}
+
+.login-form button:hover {
+    background-color: #2e6f3c;
+}
+
+.login-form button:active {
+    background-color: #265c33; /* Darker shade on click */
+}
+
+.register-link {
+    margin-top: 25px; /* Move the register link farther away from the login button */
+    font-size: 14px;
+    color: #555;
+}
+
+.register-link a {
+    color: #3d8f50;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+    color: #214e2b;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0; /* Add spacing around the tabs */
+}
+
+.tab-button {
+    flex: 1;
+    padding: 10px;
+    background: white; /* White background for unselected tabs */
+    color: #0d0f0e; /* Green text for unselected tabs */
+    border: 1px solid #ccc;
+    border-right: none; /* Remove right border to overlap with the next button */
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for color changes */
+    border-radius: 5px 5px 0 0; /* Rounded corners for the top tabs */
+}
+
+.tab-button:last-child {
+    border-right: 1px solid #ccc; /* Add right border to the last button */
+}
+
+.tab-button.active {
+    background: rgb(107, 180, 123); /* Green background for selected tabs */
+    color: white !important; /* Ensure white text for selected tabs */
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    margin-top: 0; /* Ensure no gap between tabs and content */
+}
+
+.register-form {
+    text-align: left;
+}
+
+.register-form h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #3d8f50;
+}
+
+.register-form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.register-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.register-form button {
+    width: 100%;
+    background-color: #3d8f50;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.register-form button:hover {
+    background-color: #2e6f3c;
+}
+
+.window-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 150px); /* Reduce height to add space at the top and bottom */
+    padding: 20px 0; /* Add padding to prevent touching top and bottom edges */
+    background-color: #f0fff4; /* Matches the body background */
+}
+
+.register-container {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    position: relative;
+    height: auto; /* Ensure the height adjusts dynamically */
+    max-height: calc(100vh - 200px); /* Add a maximum height to prevent overflow */
+    overflow-y: auto; /* Add scrolling if content overflows */
+}
