@@ -21,23 +21,23 @@ Route::get('/', function () {
 });
 
 Route::get('/', function () {
-    return view('index');  // resources/views/index.blade.php
+    return view('index'); 
 });
 
 Route::get('/shop', function () {
-    return view('shop');  // resources/views/shop.blade.php
+    return view('shop'); 
 });
 
 Route::get('/categories', function () {
-    return view('categories');  // resources/views/categories.blade.php
+    return view('categories');  
 });
 
 Route::get('/about', function () {
-    return view('about');  // resources/views/about.blade.php
+    return view('about');  
 });
 
 Route::get('/admin/dashboard', function () {
-    return view('admin.admin-dashboard'); // Updated location
+    return view('admin.admin-dashboard'); 
 });
 
 Route::post('/admin/dashboard/delete-database', function () {
@@ -51,17 +51,14 @@ Route::post('/admin/dashboard/delete-database', function () {
 
 Route::post('/admin/dashboard/remove-tables', function () {
     try {
-        // Disable foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
 
-        // Get all tables and drop them
         $tables = DB::select('SHOW TABLES');
         foreach ($tables as $table) {
             $tableName = array_values((array)$table)[0];
             DB::statement("DROP TABLE IF EXISTS `$tableName`");
         }
 
-        // Re-enable foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
 
         return response()->json(['message' => 'All tables removed successfully.']);
@@ -125,7 +122,7 @@ Route::post('/admin/dashboard/insert-sample-buyers', function () {
 });
 
 Route::post('/admin/dashboard/insert-buyer', function (Illuminate\Http\Request $request) {
-    \Log::info('Form Input:', $request->all()); // Log the input data
+    \Log::info('Form Input:', $request->all()); 
 
     try {
         $validatedData = $request->validate([
@@ -141,7 +138,7 @@ Route::post('/admin/dashboard/insert-buyer', function (Illuminate\Http\Request $
             'ZIP' => 'required|string|max:10',
         ]);
 
-        \Log::info('Validation Passed:', $validatedData); // Log validated data
+        \Log::info('Validation Passed:', $validatedData); 
 
         $buyerId = '8' . Str::random(9);
 
@@ -162,10 +159,10 @@ Route::post('/admin/dashboard/insert-buyer', function (Illuminate\Http\Request $
 
         return redirect()->back()->with('success', 'Buyer inserted successfully.');
     } catch (\Illuminate\Validation\ValidationException $e) {
-        \Log::error('Validation Error:', $e->errors()); // Log validation errors
+        \Log::error('Validation Error:', $e->errors()); 
         return redirect()->back()->withErrors($e->errors())->withInput();
     } catch (\Exception $e) {
-        \Log::error('Database Insert Error:', ['error' => $e->getMessage()]); // Log database errors
+        \Log::error('Database Insert Error:', ['error' => $e->getMessage()]);
         return redirect()->back()->with('error', 'Failed to insert buyer. Please try again.');
     }
 });
@@ -173,11 +170,11 @@ Route::post('/admin/dashboard/insert-buyer', function (Illuminate\Http\Request $
 Route::get('/register', function (Illuminate\Http\Request $request) {
     $role = $request->query('role');
     if ($role === 'seller') {
-        return view('register-seller'); // resources/views/register-seller.blade.php
+        return view('register-seller');
     } elseif ($role === 'buyer') {
-        return view('register-buyer'); // resources/views/register-buyer.blade.php
+        return view('register-buyer'); 
     } else {
-        return view('register'); // resources/views/register.blade.php
+        return view('register');
     }
 });
 

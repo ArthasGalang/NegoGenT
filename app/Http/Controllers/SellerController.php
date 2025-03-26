@@ -12,22 +12,24 @@ class SellerController extends Controller
 {
     public function register(Request $request)
     {
-        \Log::info('Form Input:', $request->all()); // Log the input data
+        \Log::info('Form Input:', $request->all()); 
 
         try {
             $validatedData = $request->validate([
                 'FirstName' => 'required|string|max:255',
                 'LastName' => 'required|string|max:255',
-                'Email' => 'required|email|unique:tbl_seller,Email',
+                'Email' => 'required|email|unique:tbl_seller,Email|unique:tbl_buyer,Email',
                 'Password' => 'required|string|min:8|confirmed',
                 'ContactNo' => 'required|string|max:15',
                 'Barangay' => 'required|string|max:255',
                 'Municipality' => 'required|string|max:255',
                 'Street' => 'required|string|max:255',
                 'ZIP' => 'required|string|size:4',
-                'BusinessName' => 'required|string|max:255',
-                'BusinessPermit' => 'required|file|mimes:png,jpg|max:25600', // Max 25MB
+                'BusinessName' => 'required|string|max:255|unique:tbl_seller,BusinessName',
+                'BusinessPermit' => 'required|file|mimes:png,jpg|max:25600',
             ], [
+                'Email.unique' => 'Email is already registered.',
+                'BusinessName.unique' => 'Business is already registered.',
                 'Password.min' => 'Must be 8 characters long.',
                 'Password.confirmed' => 'Password does not match.',
                 'ZIP.size' => 'Must be 4 characters long.',
@@ -35,9 +37,8 @@ class SellerController extends Controller
                 'BusinessPermit.max' => 'File size must not exceed 25MB.',
             ]);
 
-            \Log::info('Validation Passed:', $validatedData); // Log validated data
+            \Log::info('Validation Passed:', $validatedData); 
 
-            // Handle file upload
             $businessPermit = $request->file('BusinessPermit')->store('business_permits', 'public');
 
             $sellerId = null;
@@ -61,15 +62,15 @@ class SellerController extends Controller
                 'ZIP' => $validatedData['ZIP'],
                 'BusinessName' => $validatedData['BusinessName'],
                 'BusinessPermit' => $businessPermit,
-                'Verified' => false, // Explicitly set to false
+                'Verified' => false,
             ]);
 
-            return redirect()->back()->with('success', 'Seller account created successfully!');
+            return redirect('/login')->with('success', 'Seller account created successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('Validation Error:', $e->errors()); // Log validation errors
+            \Log::error('Validation Error:', $e->errors()); 
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            \Log::error('Database Insert Error:', ['error' => $e->getMessage()]); // Log database errors
+            \Log::error('Database Insert Error:', ['error' => $e->getMessage()]); 
             return redirect()->back()->with('error', 'Failed to create seller account. Please try again.');
         }
     }

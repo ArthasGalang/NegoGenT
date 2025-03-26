@@ -120,6 +120,9 @@
                             <div class="form-group">
                                 <label for="buyer-email">Email</label>
                                 <input type="email" id="buyer-email" name="Email" placeholder="name@example.com" required>
+                                @error('Email')
+                                    <span class="error-text" style="color: red; font-size: 0.7em;">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label for="buyer-password">Password</label>
@@ -341,14 +344,14 @@
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
             
-            // Check URL hash for tab
-            const hash = window.location.hash.substring(1); // Remove the '#' from the hash
+        
+            const hash = window.location.hash.substring(1); 
             if (hash) {
-                // Remove active class from all buttons and contents
+                
                 tabButtons.forEach(btn => btn.classList.remove('active'));
                 tabContents.forEach(content => content.classList.remove('active'));
                 
-                // Activate the tab based on the hash
+                
                 const tabButton = document.querySelector(`.tab-button[data-tab="${hash}"]`);
                 if (tabButton) {
                     tabButton.classList.add('active');
@@ -358,14 +361,11 @@
             
             tabButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // Remove active class from all buttons and contents
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
                     
-                    // Add active class to clicked button
                     this.classList.add('active');
                     
-                    // Show corresponding content
                     const tabId = this.getAttribute('data-tab');
                     document.getElementById(`${tabId}-tab`).classList.add('active');
                 });

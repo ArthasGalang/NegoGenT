@@ -10,7 +10,7 @@ class BuyerController extends Controller
 {
     public function register(Request $request)
     {
-        \Log::info('Form Input:', $request->all()); // Log the input data
+        \Log::info('Form Input:', $request->all()); 
 
         try {
             $validatedData = $request->validate([
@@ -18,21 +18,28 @@ class BuyerController extends Controller
                 'LastName' => 'required|string|max:255',
                 'Age' => 'required|integer',
                 'ContactNo' => 'required|string|max:15',
-                'Email' => 'required|email|unique:tbl_buyer,Email',
+                'Email' => 'required|email|unique:tbl_buyer,Email|unique:tbl_seller,Email',
                 'Password' => 'required|string|min:8|confirmed',
                 'Barangay' => 'required|string|max:255',
                 'Municipality' => 'required|string|max:255',
                 'Street' => 'required|string|max:255',
                 'ZIP' => 'required|string|size:4',
             ], [
+                'Email.unique' => 'Email is already registered.',
                 'Password.min' => 'Must be 8 characters long.',
                 'Password.confirmed' => 'Password does not match.',
                 'ZIP.size' => 'Must be 4 characters long.',
             ]);
 
-            \Log::info('Validation Passed:', $validatedData); // Log validated data
+            \Log::info('Validation Passed:', $validatedData); 
 
-            $buyerId = '8' . str_pad(mt_rand(1, 999999999), 9, '0', STR_PAD_LEFT); // Generate a numeric Buyer_Id
+            $buyerId = null;
+
+            // Ensure unique Buyer_Id
+            do {
+                $buyerId = '8' . str_pad(mt_rand(1, 999999999), 9, '0', STR_PAD_LEFT);
+                $exists = DB::table('tbl_buyer')->where('Buyer_Id', $buyerId)->exists();
+            } while ($exists);
 
             DB::table('tbl_buyer')->insert([
                 'Buyer_Id' => $buyerId,
@@ -49,12 +56,12 @@ class BuyerController extends Controller
                 'Verified' => false,
             ]);
 
-            return redirect()->back()->with('success', 'Account created successfully!');
+            return redirect('/login')->with('success', 'Account created successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('Validation Error:', $e->errors()); // Log validation errors
+            \Log::error('Validation Error:', $e->errors()); 
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            \Log::error('Database Insert Error:', ['error' => $e->getMessage()]); // Log database errors
+            \Log::error('Database Insert Error:', ['error' => $e->getMessage()]); 
             return redirect()->back()->with('error', 'Failed to create account. Please try again.');
         }
     }
