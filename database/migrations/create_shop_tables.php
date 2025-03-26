@@ -45,15 +45,15 @@ return new class extends Migration
         Schema::create('tbl_products', function (Blueprint $table) {
             $table->bigIncrements('Product_Id')->unique();
             $table->unsignedBigInteger('Seller_Id');
+            $table->string('Category', 250); // Store category as a string directly
             $table->string('Product_Name', 250);
             $table->decimal('Price', 10, 2);
             $table->string('Description', 1000);
             $table->integer('Stock');
             $table->boolean('Verified')->default(false);
-            $table->string('Product_Image', 250)->nullable();
+            $table->string('Product_Image', 250)->nullable(); // Make this column nullable
             $table->foreign('Seller_Id')->references('Seller_Id')->on('tbl_seller')->onDelete('cascade');
         });
-
 
         // Create tbl_orders
         Schema::create('tbl_orders', function (Blueprint $table) {
@@ -87,36 +87,16 @@ return new class extends Migration
             $table->foreign('Buyer_Id')->references('Buyer_Id')->on('tbl_buyer')->onDelete('cascade');
         });
 
-        // Create tbl_categories
-        Schema::create('tbl_categories', function (Blueprint $table) {
-            $table->bigIncrements('Category_Id');
-            $table->string('Category_Name', 250)->unique();
-            $table->string('Category_Description', 1000)->nullable();
-        });
-
-        // Create tbl_product_categories
-        Schema::create('tbl_product_categories', function (Blueprint $table) {
-            $table->bigIncrements('Product_Category_Id');
-            $table->unsignedBigInteger('Product_Id');
-            $table->unsignedBigInteger('Category_Id');
-            $table->foreign('Product_Id')->references('Product_Id')->on('tbl_products')->onDelete('cascade');
-            $table->foreign('Category_Id')->references('Category_Id')->on('tbl_categories')->onDelete('cascade');
-        });
-
-
     }
 
     public function down()
     {
-        Schema::dropIfExists('tbl_product_categories');
-        Schema::dropIfExists('tbl_categories');
         Schema::dropIfExists('tbl_reviews');
         Schema::dropIfExists('tbl_order_items');
         Schema::dropIfExists('tbl_orders');
         Schema::dropIfExists('tbl_buyer');
         Schema::dropIfExists('tbl_products');
         Schema::dropIfExists('tbl_seller');
-        Schema::dropIfExists('tbl_emails');
     }
 }
 ;
