@@ -41,8 +41,15 @@
                     </svg>
                 </button>
                 <div class="dropdown-menu">
-                    <a href="login">Sign In</a>
-                    <a href="register">Register</a>
+                    @if(Session::has('buyer_id'))
+                        <span style="display: block; text-align: center; margin-top: 7px;">{{ DB::table('tbl_buyer')->where('Buyer_Id', Session::get('buyer_id'))->value('FirstName') }}</span>
+                        <hr>
+                        <a href="{{ url('/buyer/account') }}">Account</a>
+                        <a href="{{ url('/logout') }}" class="logout-button">Log Out</a>
+                    @else
+                        <a href="{{ url('/login') }}">Sign In</a>
+                        <a href="{{ url('/register') }}">Register</a>
+                    @endif
                 </div>
             </div>
         </div>

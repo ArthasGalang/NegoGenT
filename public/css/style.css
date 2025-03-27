@@ -313,6 +313,20 @@ p {
     width: 100%;
 }
 
+.logout-button {
+    display: block;
+    text-align: left;
+    padding: 0.5rem;
+    border-radius: var(--radius);
+    background-color: transparent;
+    color: black;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #ffcccc; /* Light red background */
+}
+
 /* Hero Section */
 .hero {
     padding: 5rem 0;

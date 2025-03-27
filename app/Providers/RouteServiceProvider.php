@@ -33,8 +33,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
+            $this->mapWebRoutes();
         });
     }
 
@@ -48,5 +47,17 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
+    }
+
+    /**
+     * Map the web routes for the application.
+     *
+     * @return void
+     */
+    protected function mapWebRoutes()
+    {
+        Route::middleware('web') // Ensure 'web' middleware is applied
+             ->namespace($this->namespace)
+             ->group(base_path('routes/web.php'));
     }
 }

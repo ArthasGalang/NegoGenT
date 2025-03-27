@@ -87,6 +87,22 @@ return new class extends Migration
             $table->foreign('Buyer_Id')->references('Buyer_Id')->on('tbl_buyer')->onDelete('cascade');
         });
 
+        // Create tbl_emails
+        Schema::create('tbl_emails', function (Blueprint $table) {
+            $table->id('Email_Id');
+            $table->string('Email', 250)->unique();
+        });
+
+        // Create tbl_coupons
+        Schema::create('tbl_coupons', function (Blueprint $table) {
+            $table->id('Coupon_Id');
+            $table->string('Coupon_Code', 100);
+            $table->decimal('Discount_Amount', 10, 2);
+            $table->timestamp('Valid_From')->nullable();
+            $table->timestamp('Valid_To')->nullable();
+            $table->boolean('Active')->default(true);
+        });
+
     }
 
     public function down()
@@ -97,6 +113,8 @@ return new class extends Migration
         Schema::dropIfExists('tbl_buyer');
         Schema::dropIfExists('tbl_products');
         Schema::dropIfExists('tbl_seller');
+        Schema::dropIfExists('tbl_coupons');
+        Schema::dropIfExists('tbl_emails');
     }
 }
 ;

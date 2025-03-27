@@ -352,6 +352,14 @@ Route::get('/register', function (Illuminate\Http\Request $request) {
     }
 });
 
+Route::get('/register-seller', function () {
+    return view('register-seller');
+});
+
+Route::get('/register-buyer', function () {
+    return view('register-buyer');
+});
+
 Route::post('/register/buyer', [BuyerController::class, 'register'])->name('buyer.register');
 Route::post('/register/seller', [SellerController::class, 'register'])->name('seller.register');
 
@@ -377,33 +385,18 @@ Route::post('/login', function (Illuminate\Http\Request $request) {
         'password' => 'required|string',
     ]);
 
-    // Check if the email exists in the seller table
-    $seller = DB::table('tbl_seller')->where('Email', $validatedData['email'])->first();
-    if ($seller) {
-        if (!$seller->Verified) {
-            return response()->json(['message' => 'Please wait for your account to be verified.', 'verified' => false]);
-        }
-
-        if (Hash::check($validatedData['password'], $seller->Password)) {
-            Session::put('seller_id', $seller->Seller_Id);
-            return response()->json(['redirect' => url('/seller/dashboard')]);
-        }
-    }
-
-    // Check if the email exists in the buyer table
     $buyer = DB::table('tbl_buyer')->where('Email', $validatedData['email'])->first();
-    if ($buyer) {
+    if ($buyer && Hash::check($validatedData['password'], $buyer->Password)) {
         if (!$buyer->Verified) {
-            return response()->json(['message' => 'Please wait for your account to be verified.', 'verified' => false]);
+            return response()->json(['status' => 'not_verified'], 403); // Return JSON response
         }
 
-        if (Hash::check($validatedData['password'], $buyer->Password)) {
-            Session::put('buyer_id', $buyer->Buyer_Id);
-            return response()->json(['redirect' => url('/shop')]);
-        }
+        Session::put('buyer_id', $buyer->Buyer_Id); // Store buyer_id in session
+        Session::save(); // Ensure session is saved
+        return response()->json(['status' => 'success', 'user_type' => 'buyer']); // Return JSON response
     }
 
-    return response()->json(['message' => 'Invalid email or password.'], 401);
+    return response()->json(['status' => 'error', 'message' => 'Invalid email or password.'], 401); // Return JSON response
 });
 
 Route::get('/categories', [ProductController::class, 'showCategories']);
@@ -412,4 +405,13 @@ Route::get('/products', function () {
     $category = request('category');
     $products = DB::table('tbl_products')->where('category', $category)->get();
     return view('products', ['products' => $products, 'category' => $category]);
+});
+Route::get('/debug-session', function () {
+    \Log::info('Debugging session: ', ['buyer_id' => Session::get('buyer_id')]); // Log session data
+    return Session::get('buyer_id', 'No buyer_id found in session'); // Return buyer_id from session
+});
+
+Route::get('/logout', function () {
+    Session::flush(); // Clear all session data
+    return redirect('/');
 });

@@ -109,7 +109,7 @@
             const password = document.getElementById('password').value;
 
             try {
-                const response = await fetch('{{ url("/api/login") }}', {
+                const response = await fetch('{{ url("/login") }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -118,18 +118,19 @@
                     body: JSON.stringify({ email, password })
                 });
 
+                if (!response.ok) {
+                    const errorText = await response.text(); // Read the response as text
+                    console.error('Error response:', errorText);
+                    alert('An error occurred. Please try again.');
+                    return;
+                }
+
                 const result = await response.json();
 
                 if (result.status === 'not_verified') {
                     alert('Your account is not verified. Please verify your email.');
                 } else if (result.status === 'success') {
-                    if (result.user_type === 'seller') {
-                        sessionStorage.setItem('Seller_Id', result.user_id);
-                        window.location.href = '{{ url("/seller/dashboard") }}';
-                    } else if (result.user_type === 'buyer') {
-                        sessionStorage.setItem('Buyer_Id', result.user_id);
-                        window.location.href = '{{ url("/shop") }}';
-                    }
+                    window.location.href = '{{ url("/shop") }}';
                 } else {
                     alert('Invalid email or password.');
                 }
